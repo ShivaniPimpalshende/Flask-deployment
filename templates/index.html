@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sentiment Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+</head>
+<body>
+    <h1>Sentiment Analysis</h1>
+    <form id="sentimentForm">
+        <label for="productName">Enter the product name:</label>
+        <input type="text" id="productName" name="productName">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="sentimentResult"></div>
+
+    <script>
+        $(document).ready(function () {
+            $("#sentimentForm").submit(function (event) {
+                event.preventDefault();
+                var productName = $("#productName").val();
+                $.ajax({
+                    url: '/analyze',
+                    type: 'POST',
+                    data: { productName: productName },
+                    success: function (response) {
+                        var html = '';
+                        $.each(response, function (key, value) {
+                            html += key + ': ' + value + '<br>';
+                        });
+                        $("#sentimentResult").html(html);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
