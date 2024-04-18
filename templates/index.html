@@ -1,37 +1,54 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
-    <title>Sentiment Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
-</head>
-<body>
-    <h1>Sentiment Analysis</h1>
-    <form id="sentimentForm">
-        <label for="productName">Enter the product name:</label>
-        <input type="text" id="productName" name="productName">
-        <button type="submit">Submit</button>
-    </form>
-    <div id="sentimentResult"></div>
-
+    
+    <title>Sentiment Analysis  </title>
+    
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#sentimentForm").submit(function (event) {
+        $(document).ready(function() {
+            $('#analyze-form').on('submit', function(event) {
                 event.preventDefault();
-                var productName = $("#productName").val();
+                var productName = $('#productName').val();
                 $.ajax({
-                    url: '/analyze',
                     type: 'POST',
-                    data: { productName: productName },
-                    success: function (response) {
-                        var html = '';
-                        $.each(response, function (key, value) {
-                            html += key + ': ' + value + '<br>';
+                    url: '/analyze',
+                    data: {
+                        productName: productName
+                    },
+                    success: function(data) {
+                        $('#result').empty();
+                        $.each(data, function(sentiment, count) {
+                            $('#result').append('<p>' + sentiment + ': ' + count + '</p>');
                         });
-                        $("#sentimentResult").html(html);
                     }
                 });
             });
         });
     </script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body >
+    <img src="{{ url_for('static', filename='img.jpeg') }}" alt="Logo">
+    <div  class="div">
+        
+    <h1>Sentiment Analysis</h1>
+    <form id="analyze-form">
+        <label for="productName"> Name of Laptop Product:</label>
+        <input type="text" id="productName" name="productName" required>
+        <button type="submit">Analyze</button>
+    </form>
+    <h2>Results:</h2>
+    <p id="result"></p>
+
+</div>
 </body>
-</html>
+</html> 
+
+
+
+
+
+
+ 
